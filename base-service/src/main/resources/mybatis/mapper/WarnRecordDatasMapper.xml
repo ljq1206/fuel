@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heu.fuel.dao.WarnRecordDatasDao">
+    <resultMap id="BaseResultMap" type="com.heu.fuel.entity.WarnRecordDatasFindAll">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="WARNING_ID" javaType="String"  property="warning_id" />
+        <result column="WARNING_CODE" jdbcType="VARCHAR"  property="warning_code" />
+        <result column="WARNING_NAME" jdbcType="VARCHAR" property="warning_name" />
+        <result column="WARNING_MODE" jdbcType="VARCHAR" property="warning_mode" />
+        <result column="DEVICE_ID"  javaType="String" property="device_id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" javaType="String" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="WARNING_TIME" jdbcType="VARCHAR" property="warning_time" />
+        <result column="WARNING_SUGGEST" jdbcType="VARCHAR" property="warning_suggest" />
+        <result column="WARNING_METHOD" jdbcType="VARCHAR" property="warning_method" />
+        <result column="DEAL_TIME" jdbcType="VARCHAR" property="deal_time" />
+        <result column="USER_NAME" jdbcType="VARCHAR" property="deal_username" />
+        <result column="CREATED_AT" jdbcType="TIMESTAMP" property="created_at" />
+        <result column="IS_DEAL" jdbcType="INTEGER" property="is_deal" />
+        <result column="IS_DELETE" jdbcType="INTEGER" property="is_delete" />
+    </resultMap>
+    <resultMap id="NotDealWarningResultMap" type="com.heu.fuel.entity.NotDealWarning">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="WARNING_ID" javaType="String"  property="warning_id" />
+        <result column="WARNING_CODE" jdbcType="VARCHAR"  property="warning_code" />
+        <result column="WARNING_NAME" jdbcType="VARCHAR" property="warning_name" />
+        <result column="WARNING_MODE" jdbcType="VARCHAR" property="warning_mode" />
+        <result column="WARNING_SUGGEST" jdbcType="VARCHAR" property="warning_suggest" />
+        <result column="BOAT_ID" javaType="String" property="warning_boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="warning_boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="warning_boat_name" />
+        <result column="DEVICE_ID"  javaType="String" property="warning_device_id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="warning_device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="warning_device_name" />
+        <result column="WARNING_TIME" jdbcType="VARCHAR" property="warning_time" />
+        <result column="WARNING_METHOD" jdbcType="VARCHAR" property="warning_deal_method" />
+        <result column="IS_DEAL" jdbcType="INTEGER" property="is_deal" />
+    </resultMap>
+    <!--获取当前未处理预警数量-->
+    <select id="NotDealWarningCount" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0' and IS_DEAL = '0'
+    </select>
+    <!--    获取当前未处理预警信息-->
+    <select id="NotDealWarning" resultMap="NotDealWarningResultMap" >
+        select
+        id,warning_id,warning_code,warning_name,boat_id,boat_code,boat_name,
+        device_id,device_code,device_name,warning_time,WARNING_METHOD,is_deal,WARNING_MODE,WARNING_SUGGEST
+        from warning_record_datas where IS_DELETE = '0' and IS_DEAL = '0'
+        <if test="device_code !=null and device_code !=''">
+            and device_code= #{device_code}
+        </if>
+        <if test="boat_id !=null and boat_id !=''">
+            and BOAT_ID= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--查找所有-->
+    <select id="queryAll" resultMap="BaseResultMap" >
+        select
+        id,warning_id,warning_code,warning_name,device_id,device_code,device_name,boat_id,
+        boat_code,boat_name,created_at,is_deal,is_delete,WARNING_MODE,WARNING_SUGGEST,
+        DEAL_TIME,USER_NAME,WARNING_METHOD,WARNING_TIME
+        from warning_record_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and BOAT_ID= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value} , IS_DEAL asc
+            </when>
+            <otherwise>
+                order by IS_DEAL asc , CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 处理预警int   -->
+    <update id="isDealWarning">
+        update warning_record_datas
+        <trim prefix="set" suffixOverrides=",">
+            <if test="user_id !=null">
+                USER_ID = #{user_id},
+            </if>
+            <if test="username !=null ">
+                DEAL_USERNAME=#{username},
+            </if>
+            <if test="deal_time !=null ">
+                DEAL_TIME = #{deal_time},
+            </if>
+            IS_DEAL = '1',
+        </trim>
+        where id = #{id,javaType=Integer} and IS_DELETE = '0'
+    </update>
+    <!-- 处理故障int[]   -->
+    <update id="isDealWarningSz">
+        update warning_record_datas set IS_DEAL = '1'
+        where IS_DELETE = '0'
+        and id in
+        <foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+            #{id,javaType=Integer}
+        </foreach>
+    </update>
+
+</mapper>

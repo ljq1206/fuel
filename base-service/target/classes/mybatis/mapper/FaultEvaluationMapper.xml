@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heu.fuel.dao.FaultEvaluationDao">
+    <resultMap id="BaseResultMap" type="com.heu.fuel.entity.FaultEvaluationFind">
+        <result column="ID" property="id" javaType="INTEGER" />
+        <result column="OPERATION_USER_NAME" jdbcType="VARCHAR"  property="operation_user_name" />
+        <result column="CREATED_AT" jdbcType="TIMESTAMP" property="created_at" />
+        <result column="GRADE" jdbcType="INTEGER" property="grade" />
+        <result column="FAULT_FEATURE" jdbcType="VARCHAR" property="fault_feature" />
+        <result column="FAULT_REASON" jdbcType="VARCHAR" property="fault_reason" />
+        <result column="FAULT_METHOD" jdbcType="VARCHAR" property="fault_method" />
+        <result column="FAULT_ID" jdbcType="INTEGER" property="fault_id" />
+        <result column="FAULT_CODE" jdbcType="VARCHAR" property="fault_code" />
+        <result column="FAULT_NAME" jdbcType="VARCHAR" property="fault_name" />
+        <result column="BOAT_ID" jdbcType="INTEGER" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="DEVICE_ID" jdbcType="INTEGER" property="device_id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR" property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+    </resultMap>
+
+    <!--添加-->
+    <insert id="insertEvaluation" parameterType="com.heu.fuel.entity.FaultEvaluation" useGeneratedKeys="true" keyProperty="id">
+        insert INTO fault_evaluation_datas(fault_record_id,operation_user_name,grade,fault_feature,fault_reason,fault_method)
+        values (#{fault_record_id},#{operation_user_name},#{grade},#{fault_feature},#{fault_reason},#{fault_method})
+    </insert>
+    <!--    更新故障记录表评价记录-->
+    <update id="updateFaultRecord">
+        update fault_record_datas
+        set IS_EVALUATION ='1' where IS_DELETE='0' and id=#{id}
+    </update>
+
+    <!--    更新评价记录根据故障记录表-->
+    <update id="updateFaultEvaluationByFaultRecord">
+        update fault_record_datas b  JOIN fault_evaluation_datas d ON b.ID =d.FAULT_RECORD_ID
+        set d.BOAT_ID =b.BOAT_ID,d.BOAT_CODE =b.BOAT_CODE,d.BOAT_NAME =b.BOAT_NAME,d.DEVICE_ID =b.DEVICE_ID,
+            d.DEVICE_CODE =b.DEVICE_CODE,d.DEVICE_NAME =b.DEVICE_NAME,d.FAULT_ID =b.FAULT_ID,d.FAULT_CODE =b.FAULT_CODE,
+            d.FAULT_NAME =b.FAULT_NAME,d.FAULT_MODE =b.FAULT_MODE
+    </update>
+
+    <!--    获取故障评价信息-->
+    <select id="findEvaluation" resultMap="BaseResultMap" >
+        select
+        ID,fault_id,FAULT_MODE,FAULT_CODE,FAULT_NAME,FAULT_METHOD,FAULT_FEATURE,FAULT_REASON,
+        BOAT_ID,BOAT_NAME,BOAT_CODE,DEVICE_ID,DEVICE_NAME,DEVICE_CODE,GRADE,OPERATION_USER_NAME,CREATED_AT
+        from fault_evaluation_datas where IS_DELETE = '0'
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+</mapper>

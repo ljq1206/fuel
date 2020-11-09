@@ -1,0 +1,493 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heu.fuel.dao.FaultRecordDatasDao">
+    <resultMap id="BaseResultMap" type="com.heu.fuel.entity.FaultRecordDatasFindAll">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="FAULT_ID" javaType="String"  property="fault_id" />
+        <result column="FAULT_CODE" jdbcType="VARCHAR"  property="fault_code" />
+        <result column="FAULT_NAME" jdbcType="VARCHAR" property="fault_name" />
+        <result column="DEVICE_ID"  javaType="String" property="device_id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" javaType="String" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="FAULT_TIME" jdbcType="VARCHAR" property="fault_time" />
+        <result column="DEAL_USERNAME" jdbcType="VARCHAR" property="deal_username" />
+        <result column="DEAL_TIME" jdbcType="VARCHAR" property="deal_time" />
+        <result column="FAULT_METHOD" jdbcType="VARCHAR" property="fault_method" />
+        <result column="CREATED_AT" jdbcType="TIMESTAMP" property="created_at" />
+        <result column="FAULT_MODE" jdbcType="VARCHAR" property="fault_mode" />
+        <result column="FAULT_SUGGEST" jdbcType="VARCHAR" property="fault_suggest" />
+        <result column="IS_DEAL" jdbcType="INTEGER" property="is_deal" />
+        <result column="FAULT_DATA_ID" jdbcType="INTEGER" property="fault_data_id" />
+        <result column="IS_EVALUATION" jdbcType="INTEGER" property="is_evaluation" />
+        <result column="IS_DELETE" jdbcType="INTEGER" property="is_delete" />
+    </resultMap>
+    <resultMap id="NotDealFaultResultMap" type="com.heu.fuel.entity.NotDealFault">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="FAULT_ID" javaType="String"  property="fault_id" />
+        <result column="FAULT_CODE" jdbcType="VARCHAR"  property="fault_code" />
+        <result column="FAULT_NAME" jdbcType="VARCHAR" property="fault_name" />
+        <result column="FAULT_MODE" jdbcType="VARCHAR" property="fault_mode" />
+        <result column="FAULT_SUGGEST" jdbcType="VARCHAR" property="fault_suggest" />
+        <result column="BOAT_ID" javaType="String" property="fault_boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="fault_boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="fault_boat_name" />
+        <result column="DEVICE_ID"  javaType="String" property="fault_device_id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="fault_device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="fault_device_name" />
+        <result column="FAULT_TIME" jdbcType="VARCHAR" property="fault_time" />
+        <result column="FAULT_METHOD" jdbcType="VARCHAR" property="fault_deal_method" />
+        <result column="IS_DEAL" jdbcType="INTEGER" property="is_deal" />
+    </resultMap>
+
+    <!--获取当前所有故障总数-->
+    <select id="FaultTotal" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        <if test="device_code !=null and device_code !=''">
+            and device_code= #{device_code}
+        </if>
+    </select>
+    <!--获取当前未处理故障数量-->
+    <select id="NotDealFaultCount" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0' and IS_DEAL = '0'and IS_KNOW ='0'
+        <if test="device_code !=null and device_code !=''">
+            and device_code= #{device_code}
+        </if>
+    </select>
+    <!--获取当前已处理故障数量-->
+    <select id="DealFaultCount" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0' and IS_DEAL = '1'and IS_KNOW ='0'
+        <if test="device_code !=null and device_code !=''">
+            and device_code= #{device_code}
+        </if>
+    </select>
+
+<!--    获取当前未处理故障信息-->
+    <select id="NotDealFault" resultMap="NotDealFaultResultMap" >
+        select
+        id,fault_id,fault_code,fault_name,boat_id, boat_code,boat_name,device_id,
+        device_code,device_name,fault_time,FAULT_METHOD,is_deal,FAULT_MODE,FAULT_SUGGEST
+        from fault_record_datas where IS_DELETE = '0' and IS_DEAL = '0' and IS_KNOW ='0'
+        <if test="device_code !=null and device_code !=''">
+            and device_code= #{device_code}
+        </if>
+        <if test="boat_id !=null and boat_id !=''">
+            and BOAT_ID= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--查看故障信息-->
+    <select id="queryAll" resultMap="BaseResultMap" >
+        select
+        id,fault_id,fault_code,fault_name,device_id,device_code,device_name,boat_id,
+        boat_code,boat_name,created_at,is_deal,is_delete,is_evaluation,FAULT_DATA_ID,
+        FAULT_SUGGEST,FAULT_MODE,FAULT_TIME,DEAL_TIME,DEAL_USERNAME,FAULT_METHOD
+        from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        <if test="boat_id !=null and boat_id !=''">
+            and BOAT_ID= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value} , IS_DEAL asc
+            </when>
+            <otherwise>
+                order by IS_DEAL asc , CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 处理故障 int  -->
+    <update id="isDealFault">
+        update fault_record_datas set IS_DEAL = '1'
+        where id = #{id,javaType=Integer} and IS_DELETE = '0'and IS_KNOW ='0'
+    </update>
+    <!-- 处理故障 int[]  -->
+    <update id="isDealFaultSz">
+        update fault_record_datas set IS_DEAL = '1'
+        where  IS_DELETE = '0'and IS_KNOW ='0'
+        and id in
+        <foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+            #{id,javaType=Integer}
+        </foreach>
+    </update>
+
+
+    <!--    7天查询，案件分析-->
+    <!--   故障-->
+    <!--    第一天-->
+    <select id="FaultSevenOne" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 6 DAY ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第二天-->
+    <select id="FaultSevenTwo" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 6 DAY ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 5 DAY ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第三天-->
+    <select id="FaultSevenThree" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 5 DAY ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 4 DAY ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第四天-->
+    <select id="FaultSevenFour" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 4 DAY ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 3 DAY ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第五天-->
+    <select id="FaultSevenFive" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 3 DAY ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 2 DAY ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第六天-->
+    <select id="FaultSevenSix" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 2 DAY ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 1 DAY ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第七天-->
+    <select id="FaultSevenSeven" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 1 DAY ) &lt; DATE(FAULT_TIME)
+    </select>
+    <!--    预警-->
+    <!--    第一天-->
+    <select id="WarningSevenOne" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 6 DAY ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第二天-->
+    <select id="WarningSevenTwo" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 6 DAY ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 5 DAY ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第三天-->
+    <select id="WarningSevenThree" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 5 DAY ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 4 DAY ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第四天-->
+    <select id="WarningSevenFour" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 4 DAY ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 3 DAY ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第五天-->
+    <select id="WarningSevenFive" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 3 DAY ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 2 DAY ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第六天-->
+    <select id="WarningSevenSix" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 2 DAY ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 1 DAY ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第七天-->
+    <select id="WarningSevenSeven" resultType="java.lang.Integer">
+    select count(1) from warning_record_datas where IS_DELETE = '0'
+    and DATE_SUB(CURDATE(), INTERVAL 1 DAY ) &lt; DATE(WARNING_TIME)
+    </select>
+    <!--    月查询，案件分析-->
+    <!--   故障-->
+    <!--    第一周-->
+    <select id="FaultMonthOne" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 28 DAY ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 21 DAY ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第二周-->
+    <select id="FaultMonthTwo" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 21 DAY ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 14 DAY ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第三周-->
+    <select id="FaultMonthThree" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 14 DAY ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第四周-->
+    <select id="FaultMonthFour" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt; DATE(FAULT_TIME)
+    </select>
+    <!--    预警-->
+    <!--    第一周-->
+    <select id="WarnMonthOne" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 28 DAY ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 21 DAY ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第二周-->
+    <select id="WarnMonthTwo" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 21 DAY ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 14 DAY ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第三周-->
+    <select id="WarnMonthThree" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 14 DAY ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第四周-->
+    <select id="WarnMonthFour" resultType="java.lang.Integer">
+    select count(1) from warning_record_datas where IS_DELETE = '0'
+    and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt; DATE(WARNING_TIME)
+    </select>
+    <!--   季度查询，案件分析-->
+    <!--   故障-->
+    <!--    第一季度-->
+    <select id="FaultSeasonOne" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 12 MONTH ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 9 MONTH ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第二季度-->
+    <select id="FaultSeasonTwo" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 9 MONTH ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 6 MONTH ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第三季度-->
+    <select id="FaultSeasonThree" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 6 MONTH ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第四季度-->
+    <select id="FaultSeasonFour" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt; DATE(FAULT_TIME)
+    </select>
+    <!--    预警-->
+    <!--    第一季度-->
+    <select id="WarnSeasonOne" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 12 MONTH ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 9 MONTH ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第二季度-->
+    <select id="WarnSeasonTwo" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 9 MONTH ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 6 MONTH ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第三季度-->
+    <select id="WarnSeasonThree" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 6 MONTH ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第四季度-->
+    <select id="WarnSeasonFour" resultType="java.lang.Integer">
+    select count(1) from warning_record_datas where IS_DELETE = '0'
+    and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt; DATE(WARNING_TIME)
+    </select>
+
+    <!--   年查询，案件分析-->
+    <!--   故障-->
+    <!--    第一月-->
+    <select id="FaultYearOne" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 12 MONTH ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 11 MONTH ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第二月-->
+    <select id="FaultYearTwo" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 11 MONTH ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 10 MONTH ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第三月-->
+    <select id="FaultYearThree" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 10 MONTH ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 9 MONTH ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第4月-->
+    <select id="FaultYearFour" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 9 MONTH ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 8 MONTH ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第5月-->
+    <select id="FaultYearFive" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 8 MONTH ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 7 MONTH ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第6月-->
+    <select id="FaultYearSix" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 7 MONTH ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 6 MONTH ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第7月-->
+    <select id="FaultYearSeven" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 6 MONTH ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 5 MONTH ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第8月-->
+    <select id="FaultYearEight" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 5 MONTH ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 4 MONTH ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第9月-->
+    <select id="FaultYearNine" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 4 MONTH ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第10月-->
+    <select id="FaultYearTen" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 2 MONTH ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第11月-->
+    <select id="FaultYearEleven" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 2 MONTH ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第12月-->
+    <select id="FaultYearTwelve" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) &lt; DATE(FAULT_TIME)
+    </select>
+    <!--    预警-->
+    <!--    第一月-->
+    <select id="WarningYearOne" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 12 MONTH ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 11 MONTH ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第二月-->
+    <select id="WarningYearTwo" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 11 MONTH ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 10 MONTH ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第三月-->
+    <select id="WarningYearThree" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 10 MONTH ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 9 MONTH ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第4月-->
+    <select id="WarningYearFour" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 9 MONTH ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 8 MONTH ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第5月-->
+    <select id="WarningYearFive" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 8 MONTH ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 7 MONTH ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第6月-->
+    <select id="WarningYearSix" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 7 MONTH ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 6 MONTH ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第7月-->
+    <select id="WarningYearSeven" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 6 MONTH ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 5 MONTH ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第8月-->
+    <select id="WarningYearEight" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 5 MONTH ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 4 MONTH ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第9月-->
+    <select id="WarningYearNine" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 4 MONTH ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第10月-->
+    <select id="WarningYearTen" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 2 MONTH ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第11月-->
+    <select id="WarningYearEleven" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 2 MONTH ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第12月-->
+    <select id="WarningYearTwelve" resultType="java.lang.Integer">
+    select count(1) from warning_record_datas where IS_DELETE = '0'
+    and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) &lt; DATE(WARNING_TIME)
+    </select>
+
+    <!--   全部查询，案件分析-->
+    <!--   故障-->
+    <!--    第一-->
+    <select id="FaultAllOne" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 2 YEAR ) &lt; DATE(FAULT_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 1 YEAR ) >= DATE(FAULT_TIME)
+    </select>
+    <!--    第二-->
+    <select id="FaultAllTwo" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        and DATE_SUB(CURDATE(), INTERVAL 1 YEAR ) &lt;= DATE(FAULT_TIME)
+    </select>
+    <!--    预警-->
+    <!--    第1-->
+    <select id="WarnAllOne" resultType="java.lang.Integer">
+        select count(1) from warning_record_datas where IS_DELETE = '0'
+        and DATE_SUB(CURDATE(), INTERVAL 2 YEAR ) &lt; DATE(WARNING_TIME)
+        and DATE_SUB(CURDATE(), INTERVAL 1 YEAR ) >= DATE(WARNING_TIME)
+    </select>
+    <!--    第2-->
+    <select id="WarnAllTwo" resultType="java.lang.Integer">
+    select count(1) from warning_record_datas where IS_DELETE = '0'
+    and DATE_SUB(CURDATE(), INTERVAL 1 YEAR ) &lt; DATE(WARNING_TIME)
+    </select>
+
+
+</mapper>

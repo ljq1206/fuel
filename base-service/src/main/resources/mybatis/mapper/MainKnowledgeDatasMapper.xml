@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heu.fuel.dao.MainKnowledgeDatasDao">
+    <resultMap id="BaseResultMap" type="com.heu.fuel.entity.MainKnowledgeDatasFindAll">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="FAULT_CODE" jdbcType="VARCHAR"  property="fault_code" />
+        <result column="FAULT_NAME" jdbcType="VARCHAR" property="fault_name" />
+        <result column="FAULT_ALGORITHM" jdbcType="VARCHAR" property="fault_algorithm" />
+        <result column="FAULT_REASON" jdbcType="VARCHAR" property="fault_reason" />
+        <result column="FAULT_FEATURE" jdbcType="VARCHAR" property="fault_feature" />
+        <result column="FAULT_METHOD" jdbcType="VARCHAR" property="fault_method" />
+        <result column="FAULT_MODE" jdbcType="VARCHAR" property="fault_mode" />
+        <result column="FAULT_SUGGEST" jdbcType="VARCHAR" property="fault_suggest" />
+        <result column="CREATED_AT" jdbcType="TIMESTAMP" property="created_at" />
+        <result column="IS_DELETE" jdbcType="INTEGER" property="is_delete" />
+    </resultMap>
+    <resultMap id="MainKnowledgeDatastableResultMap" type="com.heu.fuel.entity.MainKnowledgeDatasTable">
+            <result column="ID"  javaType="String" property="id" />
+            <result column="FAULT_CODE" jdbcType="VARCHAR"  property="fault_code" />
+            <result column="FAULT_NAME" jdbcType="VARCHAR" property="fault_name" />
+            <result column="FAULT_COUNT" jdbcType="VARCHAR" property="fault_count" />
+            <result column="FAULT_SCALE" jdbcType="VARCHAR" property="fault_scale" />
+    </resultMap>
+    <resultMap id="FaultAnalysisResultMap" type="com.heu.fuel.entity.FaultAnalysis">
+        <result column="FAULT_NAME" jdbcType="VARCHAR" property="fault_name" />
+        <result column="FAULT_COUNT" jdbcType="INTEGER" property="fault_count" />
+        <result column="FAULT_SCALE" jdbcType="FLOAT" property="fault_scale" />
+    </resultMap>
+
+    <resultMap id="MainOptimizationFindResultMap" type="com.heu.fuel.entity.MainOptimizationFind">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="FAULT_CODE" jdbcType="VARCHAR"  property="fault_code" />
+        <result column="FAULT_NAME" jdbcType="VARCHAR" property="fault_name" />
+        <result column="FAULT_ALGORITHM" jdbcType="VARCHAR" property="algorithm" />
+        <result column="FAULT_REASON" jdbcType="VARCHAR" property="reason" />
+        <result column="FAULT_FEATURE" jdbcType="VARCHAR" property="feature" />
+        <result column="FAULT_METHOD" jdbcType="VARCHAR" property="method" />
+        <result column="FAULT_MODE" jdbcType="VARCHAR" property="fault_mode" />
+        <result column="FAULT_SUGGEST" jdbcType="VARCHAR" property="suggest" />
+        <result column="FAULT_MONTH_COUNT" jdbcType="TIMESTAMP" property="count_month" />
+    </resultMap>
+
+    <resultMap id="FaultTableResultMapSeven" type="com.heu.fuel.entity.MainKnowledgeDatasTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="FAULT_CODE" jdbcType="VARCHAR"  property="fault_code" />
+        <result column="FAULT_NAME" jdbcType="VARCHAR" property="fault_name" />
+        <result column="FAULT_COUNT_SEVEN" jdbcType="VARCHAR" property="fault_count" />
+        <result column="FAULT_SCALE_SEVEN" jdbcType="VARCHAR" property="fault_scale" />
+    </resultMap>
+    <resultMap id="FaultTableResultMapMonth" type="com.heu.fuel.entity.MainKnowledgeDatasTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="FAULT_CODE" jdbcType="VARCHAR"  property="fault_code" />
+        <result column="FAULT_NAME" jdbcType="VARCHAR" property="fault_name" />
+        <result column="FAULT_COUNT_MONTH" jdbcType="VARCHAR" property="fault_count" />
+        <result column="FAULT_SCALE_MONTH" jdbcType="VARCHAR" property="fault_scale" />
+    </resultMap>
+    <resultMap id="FaultTableResultMapQuarter" type="com.heu.fuel.entity.MainKnowledgeDatasTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="FAULT_CODE" jdbcType="VARCHAR"  property="fault_code" />
+        <result column="FAULT_NAME" jdbcType="VARCHAR" property="fault_name" />
+        <result column="FAULT_COUNT_QUARTER" jdbcType="VARCHAR" property="fault_count" />
+        <result column="FAULT_SCALE_QUARTER" jdbcType="VARCHAR" property="fault_scale" />
+    </resultMap>
+    <resultMap id="FaultTableResultMapYear" type="com.heu.fuel.entity.MainKnowledgeDatasTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="FAULT_CODE" jdbcType="VARCHAR"  property="fault_code" />
+        <result column="FAULT_NAME" jdbcType="VARCHAR" property="fault_name" />
+        <result column="FAULT_COUNT_YEAR" jdbcType="VARCHAR" property="fault_count" />
+        <result column="FAULT_SCALE_YEAR" jdbcType="VARCHAR" property="fault_scale" />
+    </resultMap>
+    <resultMap id="FaultTableResultMapAll" type="com.heu.fuel.entity.MainKnowledgeDatasTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="FAULT_CODE" jdbcType="VARCHAR"  property="fault_code" />
+        <result column="FAULT_NAME" jdbcType="VARCHAR" property="fault_name" />
+        <result column="FAULT_COUNT_ALL" jdbcType="VARCHAR" property="fault_count" />
+        <result column="FAULT_SCALE_ALL" jdbcType="VARCHAR" property="fault_scale" />
+    </resultMap>
+
+<!--故障分析-->
+    <!--获取该故障发生次数-->
+    <select id="GetFaultCountById" resultType="Integer">
+        select
+        count(*)
+        from fault_record_datas  where  IS_DELETE = '0' and FAULT_ID = #{id} and IS_KNOW = '0'
+        <if test="device_code !=null and device_code !=''">
+            and device_code= #{device_code}
+        </if>
+        <choose>
+            <when test="date == 4">
+                and DATE_SUB(CURDATE(), INTERVAL 1 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 2">
+                and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 3">
+                and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 1">
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 5">
+                and DATE_SUB(CURDATE(), INTERVAL 100 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <otherwise>
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </otherwise>
+        </choose>
+    </select>
+   <!--获取当前所有故障id-->
+    <select id="GetFaultId" resultType="Integer">
+        select ID from maintenance_knowledge_datas where IS_DELETE = '0'and IS_MAIN ='0'
+    </select>
+    <!--    获取知识库故障名称-->
+    <select id="GetFaultName" resultType="string">
+        select FAULT_NAME from maintenance_knowledge_datas where IS_DELETE = '0' and ID = #{id} and IS_MAIN ='0'
+    </select>
+    <!--    获取故障记录数量-->
+    <select id="GetFaultCount" resultType="java.lang.Integer">
+        select count(1) from fault_record_datas where IS_DELETE = '0'and IS_KNOW ='0'
+        <if test="device_code !=null and device_code !=''">
+            and device_code= #{device_code}
+        </if>
+        <choose>
+            <when test="date == 4">
+                and DATE_SUB(CURDATE(), INTERVAL 1 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 2">
+                and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 3">
+                and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 1">
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 5">
+                and DATE_SUB(CURDATE(), INTERVAL 100 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <otherwise>
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </otherwise>
+        </choose>
+    </select>
+<!--    查看故障类型统计信息——表格(7天)-->
+    <select id="queryFaultTableSeven" resultMap="FaultTableResultMapSeven" >
+        select
+        id,fault_code,fault_name,FAULT_COUNT_SEVEN,FAULT_SCALE_SEVEN
+        from fault_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--   查看船只故障统计信息——表格(一月)-->
+    <select id="queryFaultTableMonth" resultMap="FaultTableResultMapMonth">
+        select
+        id,FAULT_CODE,FAULT_NAME,FAULT_COUNT_MONTH,FAULT_SCALE_MONTH
+        from fault_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--   查看船只故障统计信息——表格(季度)-->
+    <select id="queryFaultTableQuarter" resultMap="FaultTableResultMapQuarter" >
+        select
+        id,FAULT_CODE,FAULT_NAME,FAULT_COUNT_QUARTER,FAULT_SCALE_QUARTER
+        from fault_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--   查看船只故障统计信息——表格(yi年)-->
+    <select id="queryFaultTableYear" resultMap="FaultTableResultMapYear">
+        select
+        id,FAULT_CODE,FAULT_NAME,FAULT_COUNT_YEAR,FAULT_SCALE_YEAR
+        from fault_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--   查看船只故障统计信息——表格(全部)-->
+    <select id="queryFaultTableAll" resultMap="FaultTableResultMapAll" >
+        select
+        id,FAULT_CODE,FAULT_NAME,FAULT_COUNT_ALL,FAULT_SCALE_ALL
+        from fault_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--查找所有-->
+    <select id="queryAll" resultMap="BaseResultMap" >
+        select
+        id,fault_code,fault_name,fault_algorithm,fault_reason,FAULT_MODE,FAULT_SUGGEST,fault_feature,fault_method,created_at,is_delete
+        from maintenance_knowledge_datas where IS_DELETE = '0'and IS_MAIN ='0'
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 批量获取fault is_main=1 且月计数>=3 优化信息-->
+    <select id="mainOptimizationFind" resultMap="MainOptimizationFindResultMap" >
+        select
+        id,fault_code,fault_name,fault_algorithm,fault_reason,fault_feature,fault_method,fault_month_count,FAULT_SUGGEST,FAULT_MODE
+        from maintenance_knowledge_datas where IS_DELETE = '0' and IS_MAIN = '1' and FAULT_MONTH_COUNT >= '3'
+#         and id in
+<!--        <foreach collection="array" item="fault_id" index="index" open="(" close=")" separator=",">-->
+<!--            #{fault_id}-->
+<!--        </foreach>-->
+    </select>
+    <!--    更新/确认优化-->
+    <update id="updateMainKnowledgeDatas">
+        update maintenance_knowledge_datas
+        <trim prefix="set" suffixOverrides=",">
+            <if test="fault_code !=null and fault_code !=''">
+                FAULT_CODE = #{fault_code,jdbcType=VARCHAR},
+            </if>
+            <if test="fault_name !=null and fault_name !=''">
+                FAULT_NAME = #{fault_name,jdbcType=VARCHAR},
+            </if>
+            <if test="reason !=null and reason !=''">
+                FAULT_REASON = #{reason,jdbcType=VARCHAR},
+            </if>
+            <if test="feature !=null and feature !=''">
+                FAULT_FEATURE = #{feature,jdbcType=VARCHAR},
+            </if>
+            <if test="method !=null and method !=''">
+                FAULT_METHOD = #{method,jdbcType=VARCHAR},
+            </if>
+            <if test="fault_mode !=null and fault_mode !=''">
+                FAULT_MODE = #{fault_mode,jdbcType=VARCHAR},
+            </if>
+            <if test="suggest !=null and suggest !=''">
+                FAULT_SUGGEST = #{suggest,jdbcType=VARCHAR},
+            </if>
+                IS_MAIN = '0',
+                FAULT_MONTH_COUNT = null,
+        </trim>
+        where id = #{fault_id} and IS_DELETE = '0' and IS_MAIN = '1' and FAULT_MONTH_COUNT >= '3'
+    </update>
+    <!--    根据知识库更新故障记录-->
+    <update id="updateFaultRecordByMain">
+        update maintenance_knowledge_datas m JOIN fault_record_datas r ON m.ID =r.FAULT_ID
+        set r.FAULT_CODE = m.FAULT_CODE,r.FAULT_NAME =m.FAULT_NAME,r.IS_KNOW = m.IS_MAIN
+    </update>
+
+    <!-- 取消优化-->
+    <update id="updateMainOptimization">
+        update maintenance_knowledge_datas set IS_MAIN = '1'
+        where IS_MAIN = '0' and IS_DELETE = '0'
+          and id = #{fault_id,javaType=Integer}
+    </update>
+    <!-- 添加故障库   -->
+    <insert id="insertMain" keyProperty="id" useGeneratedKeys="true">
+        insert into maintenance_knowledge_datas (FAULT_CODE,FAULT_NAME,FAULT_TYPE,FAULT_ALGORITHM,FAULT_REASON,FAULT_FEATURE,FAULT_METHOD,FAULT_MODE,FAULT_SUGGEST)
+        values (#{fault_code},#{fault_name},#{fault_type},
+                #{fault_algorithm},#{fault_reason},#{fault_feature},#{fault_method},#{fault_mode},#{fault_suggest})
+    </insert>
+
+    <!-- 添加故障类型统计表-->
+    <insert id="insertFaultStatic" useGeneratedKeys="true" keyProperty="id">
+        insert into fault_statistics_datas(fault_id,fault_code,fault_name,boat_id,fault_scale_seven,fault_scale_month,fault_scale_quarter,fault_scale_year,fault_scale_all)
+        values (#{fault_id},#{fault_code},#{fault_name},#{boat_id},#{FAULT_SCALE_SEVEN},#{FAULT_SCALE_MONTH},#{FAULT_SCALE_QUARTER},#{FAULT_SCALE_YEAR},#{FAULT_SCALE_ALL})
+    </insert>
+
+<!--    添加故障配置-->
+    <insert id="insertFaultConfig" keyProperty="id" useGeneratedKeys="true">
+        insert into fault_configuration (FAULT_ID,PARAMETER,METHOD,THRESHOLD,SIGN)
+        values (#{fault_id},#{parameter},#{method},
+                #{threshold},#{sign})
+    </insert>
+
+    <!--    获取船只id-->
+    <select id="GetBoatId" resultType="Integer">
+        select ID from boats where IS_DELETE = '0'
+    </select>
+</mapper>

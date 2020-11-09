@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heu.fuel.dao.LogDao">
+    <resultMap id="BaseResultMap" type="com.heu.fuel.entity.Log">
+        <result column="ID" property="id" javaType="String" />
+        <result column="DESCRIPTION" jdbcType="VARCHAR"  property="description" />
+        <result column="CREATED_AT" jdbcType="TIMESTAMP" property="created_at" />
+        <result column="IS_DELETE" jdbcType="INTEGER" property="is_delete" />
+    </resultMap>
+
+    <!--查找所有-->
+    <select id="queryAll" resultMap="BaseResultMap" >
+        select
+        id,description,created_at,is_delete
+        from activity_log where IS_DELETE = '0'
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--添加用户操作到数据库的日志表中-->
+    <insert id="insertLog" parameterType="com.heu.fuel.entity.LogActivity">
+        insert INTO activity_log(log_name,description)
+        values (#{log_name},#{description})
+    </insert>
+
+</mapper>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heu.fuel.dao.FaultDao">
+
+    <!--    更新boat-->
+    <update id="updateBoat">
+        update boats
+        <trim prefix="set" suffixOverrides=",">
+            <if test="FAULT_BOAT_COUNT !=null">
+                FAULT_BOAT_COUNT = #{FAULT_BOAT_COUNT},
+            </if>
+            <if test="FAULT_BOAT_SCALE !=null ">
+                FAULT_BOAT_SCALE = #{FAULT_BOAT_SCALE},
+            </if>
+        </trim>
+        where id = #{boat_id} and IS_DELETE = '0'
+    </update>
+    <!--    更新device-->
+    <update id="updateDevice">
+        update devices
+        <trim prefix="set" suffixOverrides=",">
+            <if test="FAULT_DEVICE_COUNT !=null">
+                FAULT_DEVICE_COUNT = #{FAULT_DEVICE_COUNT},
+            </if>
+            <if test="FAULT_DEVICE_SCALE !=null">
+                FAULT_DEVICE_SCALE = #{FAULT_DEVICE_SCALE},
+            </if>
+        </trim>
+        where id = #{device_id} and IS_DELETE = '0'
+    </update>
+    <!--    更新知识库-->
+    <update id="updateMain">
+        update maintenance_knowledge_datas
+        <trim prefix="set" suffixOverrides=",">
+            <if test="FAULT_COUNT !=null">
+                FAULT_COUNT = #{FAULT_COUNT},
+            </if>
+            <if test="FAULT_SCALE !=null">
+                FAULT_SCALE = #{FAULT_SCALE},
+            </if>
+        </trim>
+        where id = #{fault_id} and IS_DELETE = '0'and IS_MAIN ='0'
+    </update>
+    <!--    获取船故障数-->
+    <select id="GetBoatsFaultCount" resultType="Integer">
+        select
+            count(*)
+        from fault_record_datas  where  IS_DELETE = '0' and BOAT_ID = #{boat_id} and IS_KNOW = '0'
+    </select>
+    <!--    获取设备故障数-->
+    <select id="GetDeviceFaultCount" resultType="Integer">
+        select
+            count(*)
+        from fault_record_datas  where  IS_DELETE = '0' and DEVICE_ID = #{device_id} and IS_KNOW = '0'
+    </select>
+    <!--    获取指定故障数-->
+    <select id="GetFaultCountById" resultType="Integer">
+        select
+            count(*)
+        from fault_record_datas  where  IS_DELETE = '0' and FAULT_ID = #{fault_id} and IS_KNOW = '0'
+    </select>
+    <!-- 故障总数   -->
+    <select id="Fault_total" resultType="Integer">
+        select count(1) from fault_record_datas
+        where IS_DELETE = '0' and IS_KNOW = '0'
+    </select>
+    <!--    获取故障id-->
+    <select id="GetFaultId" resultType="Integer">
+        select
+            ID
+        from maintenance_knowledge_datas where IS_DELETE = '0'
+    </select>
+    <!--    获取船id-->
+    <select id="GetBoatsId" resultType="Integer">
+        select
+            ID
+        from boats where IS_DELETE = '0'
+    </select>
+    <!--    获取设备id-->
+    <select id="GetDeviceId" resultType="Integer">
+        select
+            ID
+        from devices where IS_DELETE = '0'
+    </select>
+
+
+
+
+</mapper>

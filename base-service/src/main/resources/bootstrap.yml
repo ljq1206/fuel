@@ -1,0 +1,44 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: base-service
+  rabbitmq:
+    host: 39.98.151.211
+    port: 5672
+    username: ry
+    password: ry2020
+    template:
+      receive-timeout: 300000
+      reply-timeout: 300000
+      retry:
+        enabled: false
+    #确认消息已发送到交换机(Exchange)
+    publisher-confirms: true
+    #确认消息已发送到队列(Queue)
+    publisher-returns: true
+  datasource:
+#    type: com.alibaba.druid.pool.DruidDataSource  #数据源
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://39.98.151.211:3306/fuel?useUnicode=true&characterEncoding=utf-8
+    username: ry
+    password: Ryxm2020*.*
+
+  #  main:
+  #    allow-bean-definition-overriding: true    #spring boot 2.1 需要设定 防止bean重复或者覆盖
+  cloud:
+    nacos:
+      discovery:  #服务发现
+        server-addr: 39.98.151.211:8848
+        cluster-name: DEFAULT
+      config:  #配置中心管理
+        server-addr: 39.98.151.211:8848
+        file-extension: yaml
+        group: DEFAULT  #此处设定这个组为咱们用的  配置文件
+
+#mybatis的配置
+mybatis:
+  type-aliases-package: com.heu.fuel.entity
+  config-location: classpath:mybatis/mybatis-config.xml   #也可以不写这些文件
+  mapper-locations: classpath:mybatis/mapper/*.xml

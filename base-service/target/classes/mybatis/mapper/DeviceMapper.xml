@@ -1,0 +1,1068 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heu.fuel.dao.DeviceDao">
+    <resultMap id="BaseResultMap" type="com.heu.fuel.entity.DeviceFindAll">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" jdbcType="VARCHAR" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="CREATED_AT" jdbcType="TIMESTAMP" property="created_at" />
+        <result column="IS_DELETE" jdbcType="INTEGER" property="is_delete" />
+    </resultMap>
+    <resultMap id="DeviceFaultTableResultMap" type="com.heu.fuel.entity.DeviceFaultTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" jdbcType="VARCHAR" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="FAULT_DEVICE_COUNT" jdbcType="INTEGER" property="fault_device_count" />
+        <result column="FAULT_DEVICE_SCALE" jdbcType="FLOAT" property="fault_device_scale" />
+    </resultMap>
+    <resultMap id="DeviceWarningTableResultMap" type="com.heu.fuel.entity.DeviceWarningTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" jdbcType="VARCHAR" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="WARNING_DEVICE_COUNT" jdbcType="INTEGER" property="warning_device_count" />
+        <result column="WARNING_DEVICE_SCALE" jdbcType="FLOAT" property="warning_device_scale" />
+    </resultMap>
+    <resultMap id="DeviceFaultRankResultMap" type="com.heu.fuel.entity.DeviceFaultRank">
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="fault_device_name" />
+        <result column="FAULT_DEVICE_COUNT" jdbcType="INTEGER" property="fault_device_count" />
+    </resultMap>
+    <resultMap id="DeviceWarningRankResultMap" type="com.heu.fuel.entity.DeviceWarningRank">
+    <result column="DEVICE_NAME" jdbcType="VARCHAR" property="warning_device_name" />
+    <result column="WARNING_DEVICE_COUNT" jdbcType="INTEGER" property="warning_device_count" />
+    </resultMap>
+    <resultMap id="FaultTableResultMapSeven" type="com.heu.fuel.entity.DeviceFaultTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" jdbcType="VARCHAR" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="FAULT_COUNT_SEVEN" jdbcType="INTEGER" property="fault_device_count" />
+        <result column="FAULT_SCALE_SEVEN" jdbcType="FLOAT" property="fault_device_scale" />
+    </resultMap>
+    <resultMap id="FaultTableResultMapMonth" type="com.heu.fuel.entity.DeviceFaultTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" jdbcType="VARCHAR" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="FAULT_COUNT_MONTH" jdbcType="INTEGER" property="fault_device_count" />
+        <result column="FAULT_SCALE_MONTH" jdbcType="FLOAT" property="fault_device_scale" />
+    </resultMap>
+    <resultMap id="FaultTableResultMapQuarter" type="com.heu.fuel.entity.DeviceFaultTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" jdbcType="VARCHAR" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="FAULT_COUNT_QUARTER" jdbcType="INTEGER" property="fault_device_count" />
+        <result column="FAULT_SCALE_QUARTER" jdbcType="FLOAT" property="fault_device_scale" />
+    </resultMap>
+    <resultMap id="FaultTableResultMapYear" type="com.heu.fuel.entity.DeviceFaultTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" jdbcType="VARCHAR" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="FAULT_COUNT_YEAR" jdbcType="INTEGER" property="fault_device_count" />
+        <result column="FAULT_SCALE_YEAR" jdbcType="FLOAT" property="fault_device_scale" />
+    </resultMap>
+    <resultMap id="FaultTableResultMapAll" type="com.heu.fuel.entity.DeviceFaultTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" jdbcType="VARCHAR" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="FAULT_COUNT_ALL" jdbcType="INTEGER" property="fault_device_count" />
+        <result column="FAULT_SCALE_ALL" jdbcType="FLOAT" property="fault_device_scale" />
+    </resultMap>
+
+    <resultMap id="WarningTableResultMapSeven" type="com.heu.fuel.entity.DeviceWarningTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" jdbcType="VARCHAR" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="WARNING_COUNT_SEVEN" jdbcType="INTEGER" property="warning_device_count" />
+        <result column="WARNING_SCALE_SEVEN" jdbcType="FLOAT" property="warning_device_scale" />
+    </resultMap>
+    <resultMap id="WarningTableResultMapMonth" type="com.heu.fuel.entity.DeviceWarningTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" jdbcType="VARCHAR" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="WARNING_COUNT_MONTH" jdbcType="INTEGER" property="warning_device_count" />
+        <result column="WARNING_SCALE_MONTH" jdbcType="FLOAT" property="warning_device_scale" />
+    </resultMap>
+    <resultMap id="WarningTableResultMapQuarter" type="com.heu.fuel.entity.DeviceWarningTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" jdbcType="VARCHAR" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="WARNING_COUNT_QUARTER" jdbcType="INTEGER" property="warning_device_count" />
+        <result column="WARNING_SCALE_QUARTER" jdbcType="FLOAT" property="warning_device_scale" />
+    </resultMap>
+    <resultMap id="WarningTableResultMapYear" type="com.heu.fuel.entity.DeviceWarningTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" jdbcType="VARCHAR" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="WARNING_COUNT_YEAR" jdbcType="INTEGER" property="warning_device_count" />
+        <result column="WARNING_SCALE_YEAR" jdbcType="FLOAT" property="warning_device_scale" />
+    </resultMap>
+    <resultMap id="WarningTableResultMapAll" type="com.heu.fuel.entity.DeviceWarningTable">
+        <result column="ID"  javaType="String" property="id" />
+        <result column="DEVICE_CODE" jdbcType="VARCHAR"  property="device_code" />
+        <result column="DEVICE_NAME" jdbcType="VARCHAR" property="device_name" />
+        <result column="BOAT_ID" jdbcType="VARCHAR" property="boat_id" />
+        <result column="BOAT_CODE" jdbcType="VARCHAR" property="boat_code" />
+        <result column="BOAT_NAME" jdbcType="VARCHAR" property="boat_name" />
+        <result column="WARNING_COUNT_ALL" jdbcType="INTEGER" property="warning_device_count" />
+        <result column="WARNING_SCALE_ALL" jdbcType="FLOAT" property="warning_device_scale" />
+    </resultMap>
+<!--    设备故障/预警排行-->
+    <!--获取设备故障数量-->
+    <select id="GetDeviceFaultCount" resultType="Integer">
+        select
+        count(*)
+        from fault_record_datas  where  IS_DELETE = '0' and DEVICE_ID = #{id} and IS_KNOW = '0'
+        <choose>
+            <when test="date == 4">
+                and DATE_SUB(CURDATE(), INTERVAL 1 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 2">
+                and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 3">
+                and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 1">
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 5">
+                and DATE_SUB(CURDATE(), INTERVAL 100 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <otherwise>
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </otherwise>
+        </choose>
+    </select>
+    <!--获取设备预警数量-->
+    <select id="GetDeviceWarningCount" resultType="Integer">
+        select
+        count(*)
+        from warning_record_datas  where  IS_DELETE = '0' and DEVICE_ID = #{id}
+        <choose>
+            <when test="date == 4">
+                and DATE_SUB(CURDATE(), INTERVAL 1 YEAR) &lt;= DATE(WARNING_TIME)
+            </when>
+            <when test="date == 2">
+                and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) &lt;= DATE(WARNING_TIME)
+            </when>
+            <when test="date == 3">
+                and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt;= DATE(WARNING_TIME)
+            </when>
+            <when test="date == 1">
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(WARNING_TIME)
+            </when>
+            <when test="date == 5">
+                and DATE_SUB(CURDATE(), INTERVAL 100 YEAR) &lt;= DATE(WARNING_TIME)
+            </when>
+            <otherwise>
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(WARNING_TIME)
+            </otherwise>
+        </choose>
+    </select>
+    <!--    获取设备数量-->
+    <select id="GetDeviceId" resultType="Integer">
+        select ID from devices where IS_DELETE = '0'
+    </select>
+    <!--    获取设备名称-->
+    <select id="GetDeviceName" resultType="string">
+        select DEVICE_NAME from devices where IS_DELETE = '0' and ID = #{id}
+    </select>
+
+    <!--   设备当前状态     -->
+    <!--    当前故障状态-->
+    <select id="FaultStatus" resultType="java.lang.Integer">
+        select count(*) from fault_record_datas
+        where IS_DELETE ='0' and IS_DEAL ='0'and IS_KNOW = '0'
+        <choose>
+            <when test="device_code !=null and device_code !=''" >
+                and device_code = #{device_code}
+            </when>
+        </choose>
+    </select>
+    <!--    当前预警状态-->
+    <select id="WarningStatus" resultType="java.lang.Integer">
+        select count(*) from warning_record_datas
+        where IS_DELETE ='0' and IS_DEAL ='0'
+        <choose>
+            <when test="device_code !=null and device_code !=''" >
+                and device_code = #{device_code}
+            </when>
+        </choose>
+    </select>
+    <!--    当前设备预防性维护状态-->
+    <select id="PreventStatus" resultType="java.lang.Integer">
+        select count(*) from maintain_record_datas
+        where IS_DELETE ='0' and IS_DEAL ='0'
+        <choose>
+            <when test="device_code !=null and device_code !=''" >
+                and device_code = #{device_code}
+            </when>
+        </choose>
+    </select>
+    <!--    当前设备备品备件状态-->
+    <select id="SparepartStatus" resultType="java.lang.Integer">
+        select count(*) from sparepart_warning_datas
+        where IS_DELETE ='0' and IS_KNOW ='0'
+        <choose>
+            <when test="device_code !=null and device_code !=''" >
+                and device_code = #{device_code}
+            </when>
+        </choose>
+    </select>
+    <!--查找所有、条件查找、模糊查找-->
+    <select id="queryAll" resultMap="BaseResultMap" >
+        select
+        id,device_code,device_name,boat_id,boat_code,boat_name,created_at,is_delete
+        from devices where IS_DELETE = '0'
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+<!--    查看设备预警统计信息—表格 废弃-->
+    <select id="queryWarningTable" resultMap="DeviceWarningTableResultMap" >
+        select
+        id,device_code,device_name,boat_id,boat_code,boat_name,warning_device_count,warning_device_scale
+        from devices where IS_DELETE = '0'
+        <choose>
+            <when test="date == 4">
+                and DATE_SUB(CURDATE(), INTERVAL 1 YEAR) &lt;= DATE(CREATED_AT)
+            </when>
+            <when test="date == 2">
+                and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) &lt;= DATE(CREATED_AT)
+            </when>
+            <when test="date == 3">
+                and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt;= DATE(CREATED_AT)
+            </when>
+            <when test="date == 1">
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(CREATED_AT)
+            </when>
+            <when test="date == 5">
+                and DATE_SUB(CURDATE(), INTERVAL 100 YEAR) &lt;= DATE(CREATED_AT)
+            </when>
+            <otherwise>
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(CREATED_AT)
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--    查看设备故障统计信息—表格 废弃 -->
+    <select id="queryFaultTable" resultMap="DeviceFaultTableResultMap" >
+        select
+        id,device_code,device_name,boat_id,boat_code,boat_name,fault_device_count,fault_device_scale
+        from devices where IS_DELETE = '0'
+        <choose>
+            <when test="date == 4">
+                and DATE_SUB(CURDATE(), INTERVAL 1 YEAR) &lt;= DATE(CREATED_AT)
+            </when>
+            <when test="date == 2">
+                and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) &lt;= DATE(CREATED_AT)
+            </when>
+            <when test="date == 3">
+                and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt;= DATE(CREATED_AT)
+            </when>
+            <when test="date == 1">
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(CREATED_AT)
+            </when>
+            <when test="date == 5">
+                and DATE_SUB(CURDATE(), INTERVAL 100 YEAR) &lt;= DATE(CREATED_AT)
+            </when>
+            <otherwise>
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(CREATED_AT)
+            </otherwise>
+        </choose>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--   查看设备故障统计信息——表格(7天)-->
+    <select id="queryFaultTableSeven" resultMap="FaultTableResultMapSeven">
+        select
+        id,device_code,device_name,boat_id,boat_code,boat_name,FAULT_COUNT_SEVEN,FAULT_SCALE_SEVEN
+        from device_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--   查看船只故障统计信息——表格(一月)-->
+    <select id="queryFaultTableMonth" resultMap="FaultTableResultMapMonth">
+        select
+        id,device_code,device_name,boat_id,boat_code,boat_name,FAULT_COUNT_MONTH,FAULT_SCALE_MONTH
+        from device_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--   查看船只故障统计信息——表格(季度)-->
+    <select id="queryFaultTableQuarter" resultMap="FaultTableResultMapQuarter" >
+        select
+        id,device_code,device_name,boat_id,boat_code,boat_name,FAULT_COUNT_QUARTER,FAULT_SCALE_QUARTER
+        from device_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--   查看船只故障统计信息——表格(yi年)-->
+    <select id="queryFaultTableYear" resultMap="FaultTableResultMapYear">
+        select
+        id,device_code,device_name,boat_id,boat_code,boat_name,FAULT_COUNT_YEAR,FAULT_SCALE_YEAR
+        from device_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--   查看船只故障统计信息——表格(全部)-->
+    <select id="queryFaultTableAll" resultMap="FaultTableResultMapAll" >
+        select
+        id,device_code,device_name,boat_id,boat_code,boat_name,FAULT_COUNT_ALL,FAULT_SCALE_ALL
+        from device_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--   查看船只预警统计信息——表格(7天)-->
+    <select id="queryWarningTableSeven" resultMap="WarningTableResultMapSeven">
+        select
+        id,device_code,device_name,boat_id,boat_code,boat_name,WARNING_COUNT_SEVEN,WARNING_SCALE_SEVEN
+        from device_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--   查看船只预警统计信息——表格(一月)-->
+    <select id="queryWarningTableMonth" resultMap="WarningTableResultMapMonth">
+        select
+        id,device_code,device_name,boat_id,boat_code,boat_name,WARNING_COUNT_MONTH,WARNING_SCALE_MONTH
+        from device_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--   查看船只预警统计信息——表格(季度)-->
+    <select id="queryWarningTableQuarter" resultMap="WarningTableResultMapQuarter" >
+        select
+        id,device_code,device_name,boat_id,boat_code,boat_name,WARNING_COUNT_QUARTER,WARNING_SCALE_QUARTER
+        from device_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--   查看船只预警统计信息——表格(yi年)-->
+    <select id="queryWarningTableYear" resultMap="WarningTableResultMapYear">
+        select
+        id,device_code,device_name,boat_id,boat_code,boat_name,WARNING_COUNT_YEAR,WARNING_SCALE_YEAR
+        from device_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--   查看船只预警统计信息——表格(全部)-->
+    <select id="queryWarningTableAll" resultMap="WarningTableResultMapAll" >
+        select
+        id,device_code,device_name,boat_id,boat_code,boat_name,WARNING_COUNT_ALL,WARNING_SCALE_ALL
+        from device_statistics_datas where IS_DELETE = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id= #{boat_id}
+        </if>
+        <choose>
+            <when test="find_key !=null and find_key !='' and find_value !=null and find_value !=''" >
+                and ${find_key} like "%"#{find_value}"%"
+            </when>
+        </choose>
+        <choose>
+            <when test="sort_key !=null and sort_key !='' and sort_value !=null and sort_value !=''">
+                order by ${sort_key} ${sort_value}
+            </when>
+            <otherwise>
+                order by CREATED_AT desc
+            </otherwise>
+        </choose>
+    </select>
+    <!--    添加-->
+    <insert id="insertDevice" useGeneratedKeys="true" keyProperty="id">
+        insert into devices(device_code,device_name,boat_id,boat_code,boat_name)
+        values (#{device_code},#{device_name},#{boat_id},#{boat_code},#{boat_name})
+    </insert>
+
+    <!--    添加备品维护表-->
+    <insert id="insertMaintenance" useGeneratedKeys="true" keyProperty="id">
+        insert into maintenance_datas(device_id,device_code,device_name,boat_id,boat_code,boat_name,MAINTENANCE_NAME,MAINTENANCE_METHOD,FIT_TIME,MAINTENANCE_PLAN,REMOVE_SIGN)
+        values (#{device_id},#{device_code},#{device_name},#{boat_id},#{boat_code},#{boat_name}
+               ,#{maintenance_name},#{maintenance_method},#{fit_time},#{maintenance_plan},#{remove_sign})
+    </insert>
+
+    <!-- 添加设备统计表-->
+    <insert id="insertDeviceStatic" useGeneratedKeys="true" keyProperty="id">
+        insert into device_statistics_datas(device_id,device_code,device_name,boat_id,boat_code,boat_name,FAULT_SCALE_SEVEN,FAULT_SCALE_MONTH,FAULT_SCALE_QUARTER,FAULT_SCALE_YEAR,FAULT_SCALE_ALL,
+                                            WARNING_SCALE_SEVEN,WARNING_SCALE_MONTH,WARNING_SCALE_QUARTER,WARNING_SCALE_YEAR,WARNING_SCALE_ALL)
+        values (#{device_id},#{device_code},#{device_name},#{boat_id},#{boat_code},#{boat_name},#{FAULT_SCALE_SEVEN},#{FAULT_SCALE_MONTH},#{FAULT_SCALE_QUARTER},#{FAULT_SCALE_YEAR},#{FAULT_SCALE_ALL}
+               ,#{WARNING_SCALE_SEVEN},#{WARNING_SCALE_MONTH},#{WARNING_SCALE_QUARTER},#{WARNING_SCALE_YEAR},#{WARNING_SCALE_ALL})
+    </insert>
+    <!--    更新-->
+    <update id="updateDevice">
+         update devices
+        <trim prefix="set" suffixOverrides=",">
+            <if test="device_code !=null and device_code !=''">
+                device_code = #{device_code,jdbcType=VARCHAR},
+            </if>
+            <if test="device_name !=null and device_name !=''">
+                device_name = #{device_name,jdbcType=VARCHAR},
+            </if>
+            <if test="boat_id !=null and boat_id !=''">
+                boat_id = #{boat_id,jdbcType=VARCHAR},
+            </if>
+        </trim>
+         where id = #{id} and IS_DELETE = '0'
+    </update>
+    <!--    根据船只更新设备-->
+    <update id="updateDeviceByBoat">
+        update boats b  JOIN devices d ON b.ID =d.BOAT_ID
+        set d.BOAT_CODE =b.BOAT_CODE,d.BOAT_NAME =b.BOAT_NAME
+    </update>
+    <!--    根据设备更新原始数据-->
+    <update id="updateDataByDevice">
+        update devices b  JOIN sensor_datas d ON b.ID =d.DEVICE_ID
+        set d.DEVICE_CODE =b.DEVICE_CODE,d.DEVICE_NAME =b.DEVICE_NAME
+    </update>
+    <!--    根据设备更新故障记录-->
+    <update id="updateFaultRecordByDevice">
+        update devices b  JOIN fault_record_datas d ON b.ID =d.DEVICE_ID
+        set d.DEVICE_CODE =b.DEVICE_CODE,d.DEVICE_NAME =b.DEVICE_NAME
+    </update>
+    <!--    根据设备更新预警记录-->
+    <update id="updateWarningRecordByDevice">
+        update devices b  JOIN warning_record_datas d ON b.ID =d.DEVICE_ID
+        set d.DEVICE_CODE =b.DEVICE_CODE,d.DEVICE_NAME =b.DEVICE_NAME
+    </update>
+    <!--    根据设备更新维护信息-->
+    <update id="updatePreventByDevice">
+        update devices b  JOIN maintenance_datas d ON b.ID =d.DEVICE_ID
+        set d.DEVICE_CODE =b.DEVICE_CODE,d.DEVICE_NAME =b.DEVICE_NAME,d.BOAT_NAME =b.BOAT_NAME,d.BOAT_CODE=b.BOAT_CODE
+    </update>
+    <!--    根据设备更新维护记录-->
+    <update id="updatePreventRecordByDevice">
+        update devices b  JOIN maintain_record_datas d ON  b.ID =d.DEVICE_ID
+        set d.DEVICE_CODE =b.DEVICE_CODE,d.DEVICE_NAME =b.DEVICE_NAME
+    </update>
+    <!--    根据设备更新备品信息-->
+    <update id="updatePartByDevice">
+        update devices b  JOIN sparepart_datas d ON  b.ID =d.DEVICE_ID
+        set d.DEVICE_CODE =b.DEVICE_CODE,d.DEVICE_NAME =b.DEVICE_NAME,d.BOAT_NAME =b.BOAT_NAME,d.BOAT_CODE=b.BOAT_CODE
+    </update>
+    <!--    根据设备更新备品change-->
+    <update id="updatePartChangeByDevice">
+        update devices b  JOIN sparepart_change_datas d ON b.ID =d.DEVICE_ID
+        set d.DEVICE_CODE =b.DEVICE_CODE,d.DEVICE_NAME =b.DEVICE_NAME
+    </update>
+    <!--    根据设备更新备品warning-->
+    <update id="updatePartWarningByDevice">
+        update devices b  JOIN sparepart_warning_datas d ON  b.ID =d.DEVICE_ID
+        set d.DEVICE_CODE =b.DEVICE_CODE,d.DEVICE_NAME =b.DEVICE_NAME
+    </update>
+    <!--    根据设备更新备品inout-->
+    <update id="updatePartInoutByDevice">
+        update devices b  JOIN sparepart_inout_datas d ON b.ID =d.DEVICE_ID
+        set d.DEVICE_CODE =b.DEVICE_CODE,d.DEVICE_NAME =b.DEVICE_NAME
+    </update>
+    <!--    根据设备更新设备统计-->
+    <update id="updateDeviceSByDevice">
+        update devices b  JOIN device_statistics_datas d ON b.ID =d.DEVICE_ID
+        set d.DEVICE_CODE =b.DEVICE_CODE,d.DEVICE_NAME =b.DEVICE_NAME,d.BOAT_NAME=b.BOAT_NAME,d.BOAT_CODE=b.BOAT_CODE
+    </update>
+    <!-- 批量删除、删除-->
+    <update id="deleteDevice">
+        update devices set IS_DELETE = '1'
+        where id in
+        <foreach collection="array  " item="arr" index="index" open="(" close=")" separator=",">
+            #{arr}
+        </foreach>
+    </update>
+    <!--    删除--><!-- 根据删除设备得id删除原始数据-->
+    <update id="deleteDataByDevice">
+        update  devices b  JOIN sensor_datas d ON b.ID =d.DEVICE_ID
+        set d.IS_DELETE = b.IS_DELETE
+    </update>
+    <!--    删除--><!-- 根据删除设备得id删除故障记录-->
+    <update id="deleteFaultRecordByDevice">
+        update devices b  JOIN fault_record_datas d ON b.ID =d.DEVICE_ID
+        set d.IS_DELETE = b.IS_DELETE
+    </update>
+    <!--    删除--><!-- 根据删除设备得id删除预警记录-->
+    <update id="deleteWarningRecordByDevice">
+        update devices b  JOIN warning_record_datas d ON b.ID =d.DEVICE_ID
+        set d.IS_DELETE = b.IS_DELETE
+    </update>
+    <!--    删除--><!--    根据设备更新维护信息-->
+    <update id="deletePreventByDevice">
+        update devices b  JOIN maintenance_datas d ON b.ID =d.DEVICE_ID
+        set d.IS_DELETE = b.IS_DELETE
+    </update>
+    <!--    删除--><!--    根据设备更新维护记录-->
+    <update id="deletePreventRecordByDevice">
+        update devices b  JOIN maintain_record_datas d ON  b.ID =d.DEVICE_ID
+        set d.IS_DELETE = b.IS_DELETE
+    </update>
+    <!--    删除--><!--    根据设备更新备品信息-->
+    <update id="deletePartByDevice">
+        update devices b  JOIN sparepart_datas d ON  b.ID =d.DEVICE_ID
+        set d.IS_DELETE = b.IS_DELETE
+    </update>
+    <!--    删除--><!--    根据设备更新备品change-->
+    <update id="deletePartChangeByDevice">
+        update devices b  JOIN sparepart_change_datas d ON b.ID =d.DEVICE_ID
+        set d.IS_DELETE = b.IS_DELETE
+    </update>
+    <!--    删除--><!--    根据设备更新备品warning-->
+    <update id="deletePartWarningByDevice">
+        update devices b  JOIN sparepart_warning_datas d ON  b.ID =d.DEVICE_ID
+        set d.IS_DELETE = b.IS_DELETE
+    </update>
+    <!--    删除--><!--    根据设备更新备品inout-->
+    <update id="deletePartInoutByDevice">
+        update devices b  JOIN sparepart_inout_datas d ON b.ID =d.DEVICE_ID
+        set d.IS_DELETE = b.IS_DELETE
+    </update>
+    <!--    删除--><!--    根据设备更新设备统计-->
+    <update id="deleteDeviceSByDevice">
+        update devices b  JOIN device_statistics_datas d ON b.ID =d.DEVICE_ID
+        set d.IS_DELETE = b.IS_DELETE
+    </update>
+
+    <!--    获取指定故障数-统计-->
+    <select id="GetFaultRecordCountById" resultType="Integer">
+        select
+        count(*)
+        from fault_record_datas
+        where  IS_DELETE = '0' and FAULT_ID = #{fault_id} and IS_KNOW = '0'
+        <choose>
+            <when test="date == 4">
+                and DATE_SUB(CURDATE(), INTERVAL 1 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 2">
+                and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 3">
+                and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 1">
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 5">
+                and DATE_SUB(CURDATE(), INTERVAL 100 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <otherwise>
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </otherwise>
+        </choose>
+    </select>
+    <!--    获取指定故障数-统计-->
+    <select id="GetFaultRecordCountById1" resultType="Integer">
+        select
+        count(*)
+        from fault_record_datas
+        where  IS_DELETE = '0' and FAULT_ID = #{fault_id} and IS_KNOW = '0'
+        <if test="boat_id !=null">
+            and boat_id = #{boat_id}
+        </if>
+        <choose>
+            <when test="date == 4">
+                and DATE_SUB(CURDATE(), INTERVAL 1 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 2">
+                and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 3">
+                and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 1">
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 5">
+                and DATE_SUB(CURDATE(), INTERVAL 100 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <otherwise>
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </otherwise>
+        </choose>
+    </select>
+
+    <!-- 故障总数-统计   -->
+    <select id="FaultRecordTotal" resultType="Integer" parameterType="int">
+        select count(*) from fault_record_datas
+        where IS_DELETE = '0' and IS_KNOW = '0'
+        <choose>
+            <when test="date == 4">
+                and DATE_SUB(CURDATE(), INTERVAL 1 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 2">
+                and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 3">
+                and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 1">
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 5">
+                and DATE_SUB(CURDATE(), INTERVAL 100 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+        </choose>
+    </select>
+    <!-- 故障总数-统计   -->
+    <select id="FaultRecordTotal1" resultType="Integer" parameterType="int">
+        select count(*) from fault_record_datas
+        where IS_DELETE = '0' and IS_KNOW = '0'
+        <if test="boat_id !=null and boat_id !=''">
+            and boat_id = #{boat_id}
+        </if>
+        <choose>
+            <when test="date == 4">
+                and DATE_SUB(CURDATE(), INTERVAL 1 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 2">
+                and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 3">
+                and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 1">
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 5">
+                and DATE_SUB(CURDATE(), INTERVAL 100 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+        </choose>
+    </select>
+
+    <!--    获取船故障数-统计-->
+    <select id="GetBoatsFaultRecordCount" resultType="Integer">
+        select
+        count(1)
+        from fault_record_datas  where  IS_DELETE = '0' and BOAT_ID = #{boat_id} and IS_KNOW = '0'
+        <choose>
+            <when test="date == 4">
+                and DATE_SUB(CURDATE(), INTERVAL 1 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 2">
+                and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 3">
+                and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 1">
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 5">
+                and DATE_SUB(CURDATE(), INTERVAL 100 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <otherwise>
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--    获取设备故障数-统计-->
+    <select id="GetDeviceFaultRecordCount" resultType="Integer">
+        select
+        count(1)
+        from fault_record_datas  where  IS_DELETE = '0' and DEVICE_ID = #{device_id} and IS_KNOW = '0'
+        <choose>
+            <when test="date == 4">
+                and DATE_SUB(CURDATE(), INTERVAL 1 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 2">
+                and DATE_SUB(CURDATE(), INTERVAL 1 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 3">
+                and DATE_SUB(CURDATE(), INTERVAL 3 MONTH ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 1">
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </when>
+            <when test="date == 5">
+                and DATE_SUB(CURDATE(), INTERVAL 100 YEAR) &lt;= DATE(FAULT_TIME)
+            </when>
+            <otherwise>
+                and DATE_SUB(CURDATE(), INTERVAL 7 DAY ) &lt;= DATE(FAULT_TIME)
+            </otherwise>
+        </choose>
+    </select>
+
+    <!--更新船只统计表-->
+    <update id="updateBoatStatic">
+        update boat_statistics_datas
+        <trim prefix="set" suffixOverrides=",">
+            <if test="FAULT_COUNT_SEVEN != 0">
+                FAULT_COUNT_SEVEN = #{FAULT_COUNT_SEVEN},
+            </if>
+            <if test="FAULT_SCALE_SEVEN !=0.0 ">
+                FAULT_SCALE_SEVEN = #{FAULT_SCALE_SEVEN},
+            </if>
+            <if test="FAULT_COUNT_MONTH !=0 ">
+                FAULT_COUNT_MONTH = #{FAULT_COUNT_MONTH},
+            </if>
+            <if test="FAULT_SCALE_MONTH !=0.0 ">
+                FAULT_SCALE_MONTH = #{FAULT_SCALE_MONTH},
+            </if>
+            <if test="FAULT_COUNT_QUARTER !=0 ">
+                FAULT_COUNT_QUARTER = #{FAULT_COUNT_QUARTER},
+            </if>
+            <if test="FAULT_SCALE_QUARTER !=0.0 ">
+                FAULT_SCALE_QUARTER = #{FAULT_SCALE_QUARTER},
+            </if>
+            <if test="FAULT_COUNT_YEAR !=0 ">
+                FAULT_COUNT_YEAR = #{FAULT_COUNT_YEAR},
+            </if>
+            <if test="FAULT_SCALE_YEAR !=0.0 ">
+                FAULT_SCALE_YEAR = #{FAULT_SCALE_YEAR},
+            </if>
+            <if test="FAULT_COUNT_ALL !=0 ">
+                FAULT_COUNT_ALL = #{FAULT_COUNT_ALL},
+            </if>
+            <if test="FAULT_SCALE_ALL !=0.0 ">
+                FAULT_SCALE_ALL = #{FAULT_SCALE_ALL},
+            </if>
+            <if test="WARNING_COUNT_SEVEN !=0">
+                WARNING_COUNT_SEVEN = #{WARNING_COUNT_SEVEN},
+            </if>
+            <if test="WARNING_SCALE_SEVEN !=0.0 ">
+                WARNING_SCALE_SEVEN = #{WARNING_SCALE_SEVEN},
+            </if>
+            <if test="WARNING_COUNT_MONTH !=0 ">
+                WARNING_COUNT_MONTH = #{WARNING_COUNT_MONTH},
+            </if>
+            <if test="WARNING_SCALE_MONTH !=0.0 ">
+                WARNING_SCALE_MONTH = #{WARNING_SCALE_MONTH},
+            </if>
+            <if test="WARNING_COUNT_QUARTER !=0 ">
+                WARNING_COUNT_QUARTER = #{WARNING_COUNT_QUARTER},
+            </if>
+            <if test="WARNING_SCALE_QUARTER !=0.0 ">
+                WARNING_SCALE_QUARTER = #{WARNING_SCALE_QUARTER},
+            </if>
+            <if test="WARNING_COUNT_YEAR !=0 ">
+                WARNING_COUNT_YEAR = #{WARNING_COUNT_YEAR},
+            </if>
+            <if test="WARNING_SCALE_YEAR !=0.0 ">
+                WARNING_SCALE_YEAR = #{WARNING_SCALE_YEAR},
+            </if>
+            <if test="WARNING_COUNT_ALL !=0 ">
+                WARNING_COUNT_ALL = #{WARNING_COUNT_ALL},
+            </if>
+            <if test="WARNING_SCALE_ALL !=0.0 ">
+                WARNING_SCALE_ALL = #{WARNING_SCALE_ALL},
+            </if>
+        </trim>
+        where BOAT_ID = #{boat_id} and IS_DELETE = '0'
+    </update>
+
+    <!--更新设备统计表-->
+    <update id="updateDeviceStatic">
+        update device_statistics_datas
+        <trim prefix="set" suffixOverrides=",">
+            <if test="FAULT_COUNT_SEVEN !=0">
+                FAULT_COUNT_SEVEN = #{FAULT_COUNT_SEVEN},
+            </if>
+            <if test="FAULT_SCALE_SEVEN !=0.0 ">
+                FAULT_SCALE_SEVEN = #{FAULT_SCALE_SEVEN},
+            </if>
+            <if test="FAULT_COUNT_MONTH !=0 ">
+                FAULT_COUNT_MONTH = #{FAULT_COUNT_MONTH},
+            </if>
+            <if test="FAULT_SCALE_MONTH !=0.0 ">
+                FAULT_SCALE_MONTH = #{FAULT_SCALE_MONTH},
+            </if>
+            <if test="FAULT_COUNT_QUARTER !=0 ">
+                FAULT_COUNT_QUARTER = #{FAULT_COUNT_QUARTER},
+            </if>
+            <if test="FAULT_SCALE_QUARTER !=0.0 ">
+                FAULT_SCALE_QUARTER = #{FAULT_SCALE_QUARTER},
+            </if>
+            <if test="FAULT_COUNT_YEAR !=0 ">
+                FAULT_COUNT_YEAR = #{FAULT_COUNT_YEAR},
+            </if>
+            <if test="FAULT_SCALE_YEAR !=0.0 ">
+                FAULT_SCALE_YEAR = #{FAULT_SCALE_YEAR},
+            </if>
+            <if test="FAULT_COUNT_ALL !=0 ">
+                FAULT_COUNT_ALL = #{FAULT_COUNT_ALL},
+            </if>
+            <if test="FAULT_SCALE_ALL !=0.0 ">
+                FAULT_SCALE_ALL = #{FAULT_SCALE_ALL},
+            </if>
+            <if test="WARNING_COUNT_SEVEN !=0">
+                WARNING_COUNT_SEVEN = #{WARNING_COUNT_SEVEN},
+            </if>
+            <if test="WARNING_SCALE_SEVEN !=0.0 ">
+                WARNING_SCALE_SEVEN = #{WARNING_SCALE_SEVEN},
+            </if>
+            <if test="WARNING_COUNT_MONTH !=0 ">
+                WARNING_COUNT_MONTH = #{WARNING_COUNT_MONTH},
+            </if>
+            <if test="WARNING_SCALE_MONTH !=0.0 ">
+                WARNING_SCALE_MONTH = #{WARNING_SCALE_MONTH},
+            </if>
+            <if test="WARNING_COUNT_QUARTER !=0 ">
+                WARNING_COUNT_QUARTER = #{WARNING_COUNT_QUARTER},
+            </if>
+            <if test="WARNING_SCALE_QUARTER !=0.0 ">
+                WARNING_SCALE_QUARTER = #{WARNING_SCALE_QUARTER},
+            </if>
+            <if test="WARNING_COUNT_YEAR !=0 ">
+                WARNING_COUNT_YEAR = #{WARNING_COUNT_YEAR},
+            </if>
+            <if test="WARNING_SCALE_YEAR !=0.0 ">
+                WARNING_SCALE_YEAR = #{WARNING_SCALE_YEAR},
+            </if>
+            <if test="WARNING_COUNT_ALL !=0 ">
+                WARNING_COUNT_ALL = #{WARNING_COUNT_ALL},
+            </if>
+            <if test="WARNING_SCALE_ALL !=0.0 ">
+                WARNING_SCALE_ALL = #{WARNING_SCALE_ALL},
+            </if>
+        </trim>
+        where DEVICE_ID = #{device_id} and IS_DELETE = '0'
+    </update>
+
+    <!--更新故障统计表-->
+    <update id="updateFaultStatic">
+        update fault_statistics_datas
+        <trim prefix="set" suffixOverrides=",">
+            <if test="FAULT_COUNT_SEVEN !=0">
+                FAULT_COUNT_SEVEN = #{FAULT_COUNT_SEVEN},
+            </if>
+            <if test="FAULT_SCALE_SEVEN !=0.0 ">
+                FAULT_SCALE_SEVEN = #{FAULT_SCALE_SEVEN},
+            </if>
+            <if test="FAULT_COUNT_MONTH !=0 ">
+                FAULT_COUNT_MONTH = #{FAULT_COUNT_MONTH},
+            </if>
+            <if test="FAULT_SCALE_MONTH !=0.0 ">
+                FAULT_SCALE_MONTH = #{FAULT_SCALE_MONTH},
+            </if>
+            <if test="FAULT_COUNT_QUARTER !=0 ">
+                FAULT_COUNT_QUARTER = #{FAULT_COUNT_QUARTER},
+            </if>
+            <if test="FAULT_SCALE_QUARTER !=0.0 ">
+                FAULT_SCALE_QUARTER = #{FAULT_SCALE_QUARTER},
+            </if>
+            <if test="FAULT_COUNT_YEAR !=0 ">
+                FAULT_COUNT_YEAR = #{FAULT_COUNT_YEAR},
+            </if>
+            <if test="FAULT_SCALE_YEAR !=0.0 ">
+                FAULT_SCALE_YEAR = #{FAULT_SCALE_YEAR},
+            </if>
+            <if test="FAULT_COUNT_ALL !=0 ">
+                FAULT_COUNT_ALL = #{FAULT_COUNT_ALL},
+            </if>
+            <if test="FAULT_SCALE_ALL !=0.0 ">
+                FAULT_SCALE_ALL = #{FAULT_SCALE_ALL},
+            </if>
+        </trim>
+        where FAULT_ID = #{fault_id} and boat_id = #{boat_id} and IS_DELETE = '0'
+    </update>
+
+    <!--    删除全部-->
+    <update id="deleteAll">
+        update devices set
+            is_delete ='0'
+    </update>
+
+    <!--    判断设备添加重复-->
+    <select id="isExist" resultType="Integer">
+        select count(*) from devices where (DEVICE_NAME = #{device_name} or DEVICE_CODE = #{device_code} )and IS_DELETE ='0'
+        <if test="id!=null and id!=''">
+            and ID != #{id}
+        </if>
+    </select>
+
+    <!--    获取设备当前未处理故障名称列表-->
+    <select id="GetNotDealList" resultType="string">
+        select FAULT_NAME from fault_record_datas where IS_DELETE = '0' and IS_DEAL ='0' and DEVICE_CODE = #{device_code}
+    </select>
+</mapper>
